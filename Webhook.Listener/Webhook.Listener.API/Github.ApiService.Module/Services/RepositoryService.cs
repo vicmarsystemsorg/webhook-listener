@@ -31,7 +31,7 @@ namespace Webhook.Listener.API.Github.ApiService.Module.Services
             var json = JsonSerializer.Serialize(updateBranchProtectionDTO);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var uriEndpoint = $"{repositoryDTO.repository.url}/branches/{repositoryDTO.repository.default_branch}/protection";
+            var uriEndpoint = $"{repositoryDTO.repository.url}/branches/main/protection";
 
             HttpResponseMessage response = httpClient.PutAsync($"{uriEndpoint}", data).Result;
             HttpContent content = response.Content;
