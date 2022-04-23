@@ -38,6 +38,22 @@ namespace Webhook.Listener.API.Controllers
             return new OkObjectResult(content);
         }
 
+        [HttpGet("CreateRepository")]
+        public IActionResult CreateRepository(string repositoryName)
+        {
+            var httpClient = GetHttpClient();
+
+            CreateRepositoryDTO createRepoDTO = GetCreateRepositoryDTO(repositoryName);
+
+            var json = JsonSerializer.Serialize(createRepoDTO, options);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PostAsync("https://api.github.com/orgs/vicmarsystemsorg/repos", data).Result;
+            HttpContent content = response.Content;
+
+            return new OkObjectResult(content);
+        }
+
         private HttpClient GetHttpClient()
         {
             var httpClient = new HttpClient();
@@ -68,6 +84,31 @@ namespace Webhook.Listener.API.Controllers
                 events = new string[1] { "repository" }
             };
             return createHookDTO;
+        }
+
+        private CreateRepositoryDTO GetCreateRepositoryDTO(string repositoryName)
+        {
+            var createRepoDTO = new CreateRepositoryDTO
+            {
+                accept = "application/vnd.github.v3+json",
+                name = repositoryName,
+                description = $"Repository {repositoryName}",
+                Private = false,
+                visibility = "public",
+                homepage = "https://github.com",
+                has_issues = true,
+                has_projects = true,
+                has_wiki = true,
+                is_template = false,
+                auto_init = true, //Pass true to create an initial commit with empty README.
+                allow_squash_merge = true,
+                allow_merge_commit = true,
+                allow_rebase_merge = true,
+                allow_auto_merge = false,
+                delete_branch_on_merge = false
+            };
+
+            return createRepoDTO;
         }
     }
 }
