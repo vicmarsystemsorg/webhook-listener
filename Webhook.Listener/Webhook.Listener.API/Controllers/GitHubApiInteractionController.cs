@@ -45,7 +45,7 @@ namespace Webhook.Listener.API.Controllers
 
             CreateRepositoryDTO createRepoDTO = GetCreateRepositoryDTO(repositoryName);
 
-            var json = JsonSerializer.Serialize(createRepoDTO, options);
+            var json = JsonSerializer.Serialize(createRepoDTO);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = httpClient.PostAsync("https://api.github.com/orgs/vicmarsystemsorg/repos", data).Result;
