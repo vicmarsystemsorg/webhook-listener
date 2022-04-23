@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using Webhook.Listener.API.DTOS.Repository;
 
 namespace Webhook.Listener.API.Controllers
 {
@@ -11,6 +12,7 @@ namespace Webhook.Listener.API.Controllers
         [HttpPost]
         public IActionResult Payload([FromBody] JsonElement payload)
         {
+            var repositoryDTO = JsonSerializer.Deserialize<RepositoryDTO>(payload);
             return new OkResult();
         }
     }
