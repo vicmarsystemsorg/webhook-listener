@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using Webhook.Listener.API.DTOS;
 using Webhook.Listener.API.DTOS.Repository;
 using Webhook.Listener.API.DTOS.UpdateBranchProtection;
 using Webhook.Listener.API.Github.ApiService.Module.Fabric;
@@ -8,6 +9,19 @@ namespace Webhook.Listener.API.Github.ApiService.Module.Services
 {
     public class RepositoryService
     {
+        public void CreateRepository(string repositoryName)
+        {
+            var httpClient = HttpClientFabric.GetHttpClient();
+
+            CreateRepositoryDTO createRepoDTO = GetCreateRepositoryDTO(repositoryName);
+
+            var json = JsonSerializer.Serialize(createRepoDTO);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PostAsync("https://api.github.com/orgs/vicmarsystemsorg/repos", data).Result;
+            HttpContent content = response.Content;
+        }
+
         public void SetProtectionRules(RepositoryDTO repositoryDTO)
         {
             var httpClient = HttpClientFabric.GetHttpClient();
@@ -21,6 +35,31 @@ namespace Webhook.Listener.API.Github.ApiService.Module.Services
 
             HttpResponseMessage response = httpClient.PutAsync($"{uriEndpoint}", data).Result;
             HttpContent content = response.Content;
+        }
+
+        private CreateRepositoryDTO GetCreateRepositoryDTO(string repositoryName)
+        {
+            var createRepoDTO = new CreateRepositoryDTO
+            {
+                accept = "application/vnd.github.v3+json",
+                name = repositoryName,
+                description = $"Repository {repositoryName}",
+                Private = false,
+                visibility = "public",
+                homepage = "https://github.com",
+                has_issues = true,
+                has_projects = true,
+                has_wiki = true,
+                is_template = false,
+                auto_init = true, //Pass true to create an initial commit with empty README.
+                allow_squash_merge = true,
+                allow_merge_commit = true,
+                allow_rebase_merge = true,
+                allow_auto_merge = false,
+                delete_branch_on_merge = false
+            };
+
+            return createRepoDTO;
         }
 
         private UpdateBranchProtectionDTO GetUpdateBranchProtectionDTO()
