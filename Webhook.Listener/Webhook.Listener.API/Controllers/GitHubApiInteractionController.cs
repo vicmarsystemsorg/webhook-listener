@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Octokit;
+using Webhook.Listener.API.DTOS;
 
 namespace Webhook.Listener.API.Controllers
 {
@@ -11,23 +11,44 @@ namespace Webhook.Listener.API.Controllers
         [HttpGet("CreateWebHookCreateRepoEvent")]
         public IActionResult CreateWebHookCreateRepoEvent()
         {
-            
+            var connection = GetConnection();
+
+            var configDto = new ConfigDTO
+            {
+                content_type = "json",
+                url = "",
+                secret = "",
+                insecure_ssl = "0"
+            };
+
+            var createHookDTO = new CreateHookDTO
+            {
+                name = "web",
+                accept = "application/vnd.github.v3+json",
+                config = configDto,
+                active = true,
+                events = new string[1] {"repository"}
+            };
+
+            var data = connection.Post(new Uri("https://api.github.com/orgs/vicmarsystemsorg/hooks"),
+                createHookDTO,
+                "application/json").Result;
 
             return new OkResult();
         }
 
         [HttpGet("TestingAPIInteraction")]
-        public async Task<IActionResult> TestingAPIInteraction()
+        public IActionResult TestingAPIInteraction()
         {
             var connection = GetConnection();
-            var data = await connection.Get<HttpResponse>(new Uri("https://api.github.com/orgs/vicmarsystemsorg/hooks"), TimeSpan.FromSeconds(20));
+            var data = connection.Get<HttpResponse>(new Uri("https://api.github.com/orgs/vicmarsystemsorg/hooks"), TimeSpan.FromSeconds(20)).Result;
 
             return new OkObjectResult(data);
         }
 
         private IConnection GetConnection()
         {
-            var tokenAuth = new Credentials("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");
+            var tokenAuth = new Credentials("");
 
             var client = new GitHubClient(new ProductHeaderValue("vicmarsystemsorg"));
             client.Credentials = tokenAuth;
