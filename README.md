@@ -19,5 +19,16 @@ The required steps are listed below:
 10. Press F5 to start the web service.
 
 ## How to use the solution.
-1.- When you run the solution, you must see a Swagger page like this one
+1. When you run the solution, you must see a Swagger page like this one
 ![Swagger Home](https://github.com/vicmarsystemsorg/webhook-listener/blob/main/Reference_Images/Swagger_Home.PNG)
+2. First, you must create a webhook associated to the repository event, so when a new repository is created, the webhook will delivery that information into the "webhook-listener" solution.
+To do this, execute the "CreateWebHookCreateRepoEvent". Click on the "api/GitHubApiInteraction/CreateWebHookCreateRepoEvent" on Swagger; click on "Try it out" button. Then, as this method does not need any parameter, just click the "Execute" button. See the following image
+![Execute CreateWebHookCreateRepoEvent method] (https://github.com/vicmarsystemsorg/webhook-listener/blob/main/Reference_Images/CreateWebHookCreateRepoEvent_Execute.PNG)
+3. Next, you can create a repository to see the automation creation of the protection rules and related issue. Keep in mind that this will create a default readme file in the repository to create the default branch.
+To create the repository, execute the "CreateRepository" method. Click on the "api/GitHubApiInteraction/CreateRepository" on Swagger; click on "Try it out" button. Enter a repository name, then click on the "Execute" button. As in the following image
+![Execute CreateRepository method] (https://github.com/vicmarsystemsorg/webhook-listener/blob/main/Reference_Images/CreateRepository.PNG)
+4. Now, to confirm the automatic creation of the protection rule and related issue:
+  1. **Protection Rules**. In the Github web site, go to the home page of the repository you just created. Then go to "Settings" and then Branches. You must see a new protection rule created under the "Branch protection rules" section. See the following image
+  ![Branch Protection Rules] (https://github.com/vicmarsystemsorg/webhook-listener/blob/main/Reference_Images/Branch_Protection_Rules.PNG)
+  2. **Issues**. In the Github web site, in the home page of the repository created, go to "Issues". You must see the created issue. As in the following image:
+  ![Issues] (https://github.com/vicmarsystemsorg/webhook-listener/blob/main/Reference_Images/Issues.png)
