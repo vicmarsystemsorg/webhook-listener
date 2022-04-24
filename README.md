@@ -1,9 +1,9 @@
 # webhook-listener
 Main responsibilities associated with this project code:
-1.- Test the API Rest integration / connectivity (wich headers are required, authorization header, etc)
-2.- Listen for webhook deliveries
-3.- Create repositories and add protection rules to it.
-4.- Create issues for an specific repository
+1. Test the API Rest integration / connectivity (wich headers are required, authorization header, etc)
+2. Listen for webhook deliveries
+3. Create repositories and add protection rules to it.
+4. Create issues for an specific repository
 
 ## How to install and run the project.
 The required steps are listed below:
